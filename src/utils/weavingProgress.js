@@ -203,10 +203,14 @@ export async function fetchWeavingLeaderboard(limit = 50) {
       }
     }
 
-    if (res.status === 503) {
-      return {
-        entries: getWeavingLeaderboardLocal().slice(0, limit),
-        status: 'db_error'
+    if (res.status === 503 || res.status === 500) {
+      const isDb =
+        data.error?.includes('connection') ||
+        data.error?.includes('Postgres') ||
+        data.error?.includes('POSTGRES') ||
+        data.error?.includes('Database')
+      if (isDb || res.status === 503) {
+        return { entries: [], status: 'db_error' }
       }
     }
 

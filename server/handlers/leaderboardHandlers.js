@@ -32,7 +32,15 @@ export async function handleLeaderboardGet() {
     return { status: 200, body: { entries } }
   } catch (err) {
     console.error('handleLeaderboardGet:', err)
-    return { status: 500, body: { error: err.message || 'Failed to load leaderboard', entries: [] } }
+    const msg = err.message || ''
+    const isDb =
+      msg.includes('connection') ||
+      msg.includes('POSTGRES') ||
+      msg.includes('Database not configured')
+    return {
+      status: isDb ? 503 : 500,
+      body: { error: err.message || 'Failed to load leaderboard', entries: [] }
+    }
   }
 }
 

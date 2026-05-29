@@ -1,12 +1,11 @@
-import { sql } from '@vercel/postgres'
+import { getSql, isDbConfigured } from './client.js'
 
 const STITCH_COOLDOWN_MS = 3000
 
-export function isDbConfigured() {
-  return Boolean(process.env.POSTGRES_URL)
-}
+export { isDbConfigured }
 
 export async function ensureSchema() {
+  const sql = getSql()
   await sql`
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
@@ -27,6 +26,7 @@ export async function ensureSchema() {
 }
 
 export async function upsertUser(profile) {
+  const sql = getSql()
   await sql`
     INSERT INTO users (id, email, name, picture, first_seen_at, last_seen_at)
     VALUES (
@@ -68,7 +68,8 @@ function mapUserRow(row) {
 
 /** All signed-in students (including 0 puntadas), sorted by score then recent activity. */
 export async function getLeaderboard(limit = 50) {
-  const { rows } = await sql`
+  const sql = getSql()
+  const rows = await sql`
     SELECT
       u.id,
       u.email,
@@ -88,7 +89,8 @@ export async function getLeaderboard(limit = 50) {
 }
 
 export async function getAllUsers(limit = 200) {
-  const { rows } = await sql`
+  const sql = getSql()
+  const rows = await sql`
     SELECT
       u.id,
       u.email,
@@ -113,6 +115,7 @@ export async function registerUser(profile) {
 
 export async function incrementStitch(profile) {
   await upsertUser(profile)
+  const sql = getSql()
 
   const existing = await sql`
     SELECT total_stitches, last_updated_at
@@ -120,7 +123,7 @@ export async function incrementStitch(profile) {
     WHERE user_id = ${profile.id}
   `
 
-  const row = existing.rows[0]
+  const row = existing[0]
   if (row?.last_updated_at) {
     const elapsed = Date.now() - new Date(row.last_updated_at).getTime()
     if (elapsed < STITCH_COOLDOWN_MS) {
@@ -139,7 +142,7 @@ export async function incrementStitch(profile) {
     return { totalStitches: 1, rateLimited: false }
   }
 
-  const { rows } = await sql`
+  const updated = await sql`
     UPDATE weaving_progress
     SET
       total_stitches = total_stitches + 1,
@@ -149,7 +152,7 @@ export async function incrementStitch(profile) {
   `
 
   return {
-    totalStitches: Number(rows[0]?.total_stitches) || 0,
+    totalStitches: Number(updated[0]?.total_stitches) || 0,
     rateLimited: false
   }
 }
