@@ -1,8 +1,11 @@
 import { verifyGoogleAccessToken, getBearerToken } from '../googleAuth.js'
+import { isAdminEmail } from '../adminAuth.js'
 import {
   isDbConfigured,
   ensureSchema,
   getLeaderboard,
+  getAllUsers,
+  registerUser,
   incrementStitch
 } from '../db/leaderboardDb.js'
 
@@ -25,7 +28,7 @@ export async function handleLeaderboardGet() {
 
   try {
     await ensureDbReady()
-    const entries = await getLeaderboard(10)
+    const entries = await getLeaderboard(50)
     return { status: 200, body: { entries } }
   } catch (err) {
     console.error('handleLeaderboardGet:', err)
@@ -63,5 +66,62 @@ export async function handleStitchPost(req) {
   } catch (err) {
     console.error('handleStitchPost:', err)
     return { status: 500, body: { error: err.message || 'Failed to save stitch' } }
+  }
+}
+
+/** Record student on sign-in so they appear before earning a stitch. */
+export async function handleSessionPost(req) {
+  if (!isDbConfigured()) {
+    return { status: 503, body: { error: 'Database not configured' } }
+  }
+
+  const token = getBearerToken(req)
+  const profile = await verifyGoogleAccessToken(token)
+  if (!profile) {
+    return { status: 401, body: { error: 'Invalid or unauthorized Google session' } }
+  }
+
+  try {
+    await ensureDbReady()
+    await registerUser(profile)
+    return {
+      status: 200,
+      body: {
+        ok: true,
+        user: {
+          id: profile.id,
+          name: profile.name,
+          email: profile.email,
+          picture: profile.picture
+        }
+      }
+    }
+  } catch (err) {
+    console.error('handleSessionPost:', err)
+    return { status: 500, body: { error: err.message || 'Failed to register session' } }
+  }
+}
+
+export async function handleAdminUsersGet(req) {
+  if (!isDbConfigured()) {
+    return { status: 503, body: { error: 'Database not configured', users: [] } }
+  }
+
+  const token = getBearerToken(req)
+  const profile = await verifyGoogleAccessToken(token)
+  if (!profile) {
+    return { status: 401, body: { error: 'Unauthorized', users: [] } }
+  }
+  if (!isAdminEmail(profile.email)) {
+    return { status: 403, body: { error: 'Admin access required', users: [] } }
+  }
+
+  try {
+    await ensureDbReady()
+    const users = await getAllUsers(200)
+    return { status: 200, body: { users } }
+  } catch (err) {
+    console.error('handleAdminUsersGet:', err)
+    return { status: 500, body: { error: err.message || 'Failed to load users', users: [] } }
   }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import WeavingProgress from './WeavingProgress'
 import Leaderboard from './Leaderboard'
+import RegisteredStudents from './RegisteredStudents'
 import AnimalCelebration from './AnimalCelebration'
 import { getAnimalCelebration } from '../utils/animalCelebration'
 import { logout } from '../utils/auth'
@@ -202,6 +203,7 @@ function HomePage({ onGoToPractice, user, onLoginSuccess, onGoToLogin }) {
       {/* Leaderboard Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <Leaderboard />
+        <RegisteredStudents user={user} />
       </section>
 
       {/* Features Section */}

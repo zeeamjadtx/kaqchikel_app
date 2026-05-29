@@ -1,6 +1,11 @@
 import { loadEnv } from 'vite'
 import { loadPublishedDecks } from './server/loadPublishedDecks.js'
-import { handleLeaderboardGet, handleStitchPost } from './server/handlers/leaderboardHandlers.js'
+import {
+  handleLeaderboardGet,
+  handleStitchPost,
+  handleSessionPost,
+  handleAdminUsersGet
+} from './server/handlers/leaderboardHandlers.js'
 
 function applyEnv(mode, root) {
   const env = loadEnv(mode, root, '')
@@ -44,6 +49,18 @@ export function apiRoutes() {
 
     if (url === '/api/progress/stitch' && req.method === 'POST') {
       const { status, body } = await handleStitchPost(req)
+      sendJson(res, status, body)
+      return
+    }
+
+    if (url === '/api/auth/session' && req.method === 'POST') {
+      const { status, body } = await handleSessionPost(req)
+      sendJson(res, status, body)
+      return
+    }
+
+    if (url === '/api/admin/users' && req.method === 'GET') {
+      const { status, body } = await handleAdminUsersGet(req)
       sendJson(res, status, body)
       return
     }

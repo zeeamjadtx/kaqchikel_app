@@ -7,7 +7,7 @@ function Leaderboard() {
   const refresh = useCallback(async () => {
     setLoading(true)
     try {
-      const data = await fetchWeavingLeaderboard(10)
+      const data = await fetchWeavingLeaderboard(50)
       setEntries(data)
     } catch {
       setEntries([])
@@ -44,8 +44,8 @@ function Leaderboard() {
           Tabla de líderes
         </h3>
         <p className="text-center text-gray-500">
-          Aún no hay puntadas registradas. Inicia sesión con tu cuenta de la escuela,
-          practica y completa un mazo para aparecer en la tabla.
+          Aún no hay estudiantes registrados. Deben usar Iniciar sesión con su cuenta
+          @antiguais.org (el modo invitado no aparece aquí).
         </p>
       </div>
     )
@@ -57,7 +57,7 @@ function Leaderboard() {
         Tabla de líderes
       </h3>
       <p className="text-center text-gray-500 mb-6">
-        Personas con más puntadas tejidas en su manta (toda la escuela).
+        Estudiantes que han iniciado sesión (toda la escuela). Ordenados por puntadas.
       </p>
       <div className="space-y-3">
         {entries.map((entry, index) => (

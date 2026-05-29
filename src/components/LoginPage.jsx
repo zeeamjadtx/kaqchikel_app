@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { isAdminUser, isAllowedSchoolEmail, getPrimaryAllowedDomain } from '../utils/auth'
+import { registerUserOnServer } from '../utils/userSession'
 
 function LoginPage({ onLoginSuccess, onBack }) {
   const [isLoading, setIsLoading] = useState(false)
@@ -89,6 +90,7 @@ function LoginPage({ onLoginSuccess, onBack }) {
               }
 
               localStorage.setItem('kaqchikel_user', JSON.stringify(userData))
+              await registerUserOnServer(response.access_token)
               onLoginSuccess(userData)
             } catch (err) {
               console.error('Error fetching user data:', err)

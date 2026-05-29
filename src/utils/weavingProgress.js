@@ -193,7 +193,7 @@ export const getWeavingLeaderboardLocal = () => {
 }
 
 /** School-wide leaderboard from Vercel Postgres, with local fallback. */
-export async function fetchWeavingLeaderboard(limit = 10) {
+export async function fetchWeavingLeaderboard(limit = 50) {
   try {
     const res = await fetch('/api/leaderboard', { cache: 'no-store' })
     if (res.ok) {

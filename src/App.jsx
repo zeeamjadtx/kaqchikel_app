@@ -6,6 +6,7 @@ import LoginPage from './components/LoginPage'
 import MatchingView from './components/MatchingView'
 import { getUser, logout, isAllowedSchoolEmail } from './utils/auth'
 import { migrateGuestVocabularyToUser } from './utils/vocabularyStorage'
+import { registerUserOnServer } from './utils/userSession'
 
 function App() {
   const [view, setView] = useState('home') // 'home', 'flashcards', 'practice', 'matching', 'login'
@@ -23,6 +24,9 @@ function App() {
       setUser(null)
     } else {
       setUser(currentUser)
+      if (currentUser?.accessToken) {
+        registerUserOnServer(currentUser.accessToken)
+      }
     }
     setCheckingAuth(false)
   }, [])

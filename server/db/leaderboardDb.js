@@ -45,23 +45,8 @@ export async function upsertUser(profile) {
   `
 }
 
-export async function getLeaderboard(limit = 10) {
-  const { rows } = await sql`
-    SELECT
-      u.id,
-      u.email,
-      u.name,
-      u.picture,
-      wp.total_stitches,
-      wp.last_updated_at
-    FROM weaving_progress wp
-    INNER JOIN users u ON u.id = wp.user_id
-    WHERE wp.total_stitches > 0
-    ORDER BY wp.total_stitches DESC, wp.last_updated_at ASC
-    LIMIT ${limit}
-  `
-
-  return rows.map((row) => ({
+function mapUserRow(row) {
+  return {
     user: {
       id: row.id,
       email: row.email,
@@ -71,8 +56,59 @@ export async function getLeaderboard(limit = 10) {
     totalStitches: Number(row.total_stitches) || 0,
     lastUpdated: row.last_updated_at
       ? new Date(row.last_updated_at).toISOString()
+      : null,
+    firstSeen: row.first_seen_at
+      ? new Date(row.first_seen_at).toISOString()
+      : null,
+    lastSeen: row.last_seen_at
+      ? new Date(row.last_seen_at).toISOString()
       : null
-  }))
+  }
+}
+
+/** All signed-in students (including 0 puntadas), sorted by score then recent activity. */
+export async function getLeaderboard(limit = 50) {
+  const { rows } = await sql`
+    SELECT
+      u.id,
+      u.email,
+      u.name,
+      u.picture,
+      u.first_seen_at,
+      u.last_seen_at,
+      COALESCE(wp.total_stitches, 0) AS total_stitches,
+      COALESCE(wp.last_updated_at, u.last_seen_at) AS last_updated_at
+    FROM users u
+    LEFT JOIN weaving_progress wp ON wp.user_id = u.id
+    ORDER BY COALESCE(wp.total_stitches, 0) DESC, u.last_seen_at DESC
+    LIMIT ${limit}
+  `
+
+  return rows.map(mapUserRow)
+}
+
+export async function getAllUsers(limit = 200) {
+  const { rows } = await sql`
+    SELECT
+      u.id,
+      u.email,
+      u.name,
+      u.picture,
+      u.first_seen_at,
+      u.last_seen_at,
+      COALESCE(wp.total_stitches, 0) AS total_stitches,
+      COALESCE(wp.last_updated_at, u.last_seen_at) AS last_updated_at
+    FROM users u
+    LEFT JOIN weaving_progress wp ON wp.user_id = u.id
+    ORDER BY u.last_seen_at DESC
+    LIMIT ${limit}
+  `
+
+  return rows.map(mapUserRow)
+}
+
+export async function registerUser(profile) {
+  await upsertUser(profile)
 }
 
 export async function incrementStitch(profile) {
