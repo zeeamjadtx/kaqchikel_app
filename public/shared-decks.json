@@ -1,0 +1,567 @@
+[
+  {
+    "id": "vocabulario-de-kaqchikel-9b-pronombres-personales",
+    "name": "Pronombres personales",
+    "vocabulary": [
+      {
+        "term": "Rïn / Yin",
+        "definition": "Yo"
+      },
+      {
+        "term": "Rat / Rit",
+        "definition": "Tú"
+      },
+      {
+        "term": "Rija’",
+        "definition": "Él / Ella"
+      },
+      {
+        "term": "Röj",
+        "definition": "Nosotros/Nosotras"
+      },
+      {
+        "term": "Rïx / Rix",
+        "definition": "Ustedes"
+      },
+      {
+        "term": "Rije’",
+        "definition": "Ellos / Ellas"
+      }
+    ],
+    "createdAt": "2026-05-13T14:41:36.275Z"
+  },
+  {
+    "id": "vocabulario-de-kaqchikel-9a-colores",
+    "name": "Colores",
+    "vocabulary": [
+      {
+        "term": "Käq",
+        "definition": "rojo"
+      },
+      {
+        "term": "Säq",
+        "definition": "blanco"
+      },
+      {
+        "term": "Q'ëq",
+        "definition": "negro"
+      },
+      {
+        "term": "Q'än",
+        "definition": "amarillo"
+      },
+      {
+        "term": "Aranxäx",
+        "definition": "naranja"
+      },
+      {
+        "term": "Räx",
+        "definition": "verde"
+      },
+      {
+        "term": "Xar",
+        "definition": "azul"
+      },
+      {
+        "term": "Tuq'",
+        "definition": "morado"
+      },
+      {
+        "term": "Käqkoj",
+        "definition": "rosado"
+      },
+      {
+        "term": "K'aqö'j",
+        "definition": "cafe"
+      },
+      {
+        "term": "üs",
+        "definition": "mosquito"
+      },
+      {
+        "term": "ük",
+        "definition": "piojo"
+      },
+      {
+        "term": "äm",
+        "definition": "araña"
+      },
+      {
+        "term": "Xuru'y'",
+        "definition": "abeja"
+      },
+      {
+        "term": "palamax",
+        "definition": "mariposa"
+      },
+      {
+        "term": "lol",
+        "definition": ""
+      }
+    ],
+    "createdAt": "2026-05-13T14:40:55.720Z"
+  },
+  {
+    "id": "vocabulario-de-kaqchikel-9a-frases-frequentes",
+    "name": "Frases Frequentes",
+    "vocabulary": [
+      {
+        "term": "¿Tikirel yib’e’ pa ruxkin jay?",
+        "definition": "¿Puedo ir al baño?,,,,,,,,,,,,,"
+      },
+      {
+        "term": "¿tikirel yinel?",
+        "definition": "¿Puedo salir?,,,,,,,,,,,,,"
+      },
+      {
+        "term": "¿Achike rub’eyal nib’ix?",
+        "definition": "¿Cómo se pronuncia?,,,,,,,,,,,,,"
+      },
+      {
+        "term": "¿Acbhike rub’eyal pa kaxlan?",
+        "definition": "¿Qué significa en español?,,,,,,,,,,,,,"
+      },
+      {
+        "term": "Man nintz’ët ta",
+        "definition": "No lo veo,,,,,,,,,,,,,"
+      },
+      {
+        "term": "Tab’ana utzil katel chi ri’",
+        "definition": "Permiso por favor,,,,,,,,,,,,,"
+      },
+      {
+        "term": "Xk’is yan ri ramaj",
+        "definition": "Se terminó el tiempo,,,,,,,,,,,,,"
+      },
+      {
+        "term": "Kinato’",
+        "definition": "Ayúdame,,,,,,,,,,,,,"
+      },
+      {
+        "term": "Ja’",
+        "definition": "Si,,,,,,,,,,,,,"
+      },
+      {
+        "term": "Neq, ni’, manäq",
+        "definition": "No,,,,,,,,,,,,,"
+      },
+      {
+        "term": "¿Achike?",
+        "definition": "¿Qué?,,,,,,,,,,,,,"
+      },
+      {
+        "term": "¿Akuchi’?",
+        "definition": "¿Dónde?,,,,,,,,,,,,,"
+      },
+      {
+        "term": "¿Jampe’?",
+        "definition": "¿Cuándo?,,,,,,,,,,,,,"
+      },
+      {
+        "term": "¿Achike rub’eyal?",
+        "definition": "¿Cómo?,,,,,,,,,,,,,"
+      },
+      {
+        "term": "¿Achike?",
+        "definition": "¿Cuál?,,,,,,,,,,,,,"
+      },
+      {
+        "term": "¿Achike ruma?",
+        "definition": "¿Por qué?,,,,,,,,,,,,,"
+      },
+      {
+        "term": "Tab’ij jun b’ey chik",
+        "definition": "Dígalo otra vez,,,,,,,,,,,,,"
+      },
+      {
+        "term": "Ja re’ ri nusamaj",
+        "definition": "Aquí está mi trabajo,,,,,,,,,,,,,"
+      }
+    ],
+    "createdAt": "2026-05-13T14:33:42.512Z"
+  },
+  {
+    "id": "vocabulario-de-kaqchikel-9a-vegetables",
+    "name": "Vegetables",
+    "vocabulary": [
+      {
+        "term": "Cebolla",
+        "definition": "Xnakät"
+      },
+      {
+        "term": "Repollo",
+        "definition": "Ruk'u'x ichaj"
+      },
+      {
+        "term": "Lechuga",
+        "definition": "Yuch'ichaj"
+      },
+      {
+        "term": "Rábano",
+        "definition": "Kaqxe'"
+      },
+      {
+        "term": "Zanahoria",
+        "definition": "Q'anawäch"
+      },
+      {
+        "term": "Papa",
+        "definition": "is"
+      },
+      {
+        "term": "Remolacha",
+        "definition": "nimakaqxe"
+      },
+      {
+        "term": "Chile",
+        "definition": "ik"
+      }
+    ],
+    "createdAt": "2026-05-13T14:32:56.108Z"
+  },
+  {
+    "id": "vocabulario-de-kaqchikel-9a-frutas",
+    "name": "Frutas",
+    "vocabulary": [
+      {
+        "term": "Coco",
+        "definition": "Wachxan"
+      },
+      {
+        "term": "Banano",
+        "definition": "Saq'ul"
+      },
+      {
+        "term": "Durazno",
+        "definition": "Tur'as"
+      },
+      {
+        "term": "Limon",
+        "definition": "Limonix"
+      },
+      {
+        "term": "Piña",
+        "definition": "Ch'op"
+      },
+      {
+        "term": "Platano",
+        "definition": "Nimasaq'ul"
+      },
+      {
+        "term": "Melon",
+        "definition": "Q'anaq'oq'"
+      },
+      {
+        "term": "Aguacate",
+        "definition": "Oj"
+      },
+      {
+        "term": "Papaya",
+        "definition": "Kaqrab'"
+      },
+      {
+        "term": "Manzana",
+        "definition": "Nimamixku"
+      },
+      {
+        "term": "Mango",
+        "definition": "Q'anatz'ub'"
+      },
+      {
+        "term": "Anona",
+        "definition": "Päk"
+      },
+      {
+        "term": "Naranja",
+        "definition": "Arañazo"
+      },
+      {
+        "term": "Fresa",
+        "definition": "Saqatokan"
+      },
+      {
+        "term": "Sandía",
+        "definition": "Kaqaq'oq'"
+      }
+    ],
+    "createdAt": "2026-05-13T14:31:25.652Z"
+  },
+  {
+    "id": "vocabulario-de-kaqchikel-9a-frases-de-cortesia",
+    "name": "Frases de cortesia",
+    "vocabulary": [
+      {
+        "term": "Tabána utzil",
+        "definition": "Por favor"
+      },
+      {
+        "term": "Kinakuyu´",
+        "definition": "Disculpame"
+      },
+      {
+        "term": "Chón chik",
+        "definition": "Adiós"
+      },
+      {
+        "term": "Nqatzet qi´",
+        "definition": "Nos vemos"
+      },
+      {
+        "term": "Yinik'o'",
+        "definition": "Permiso"
+      },
+      {
+        "term": "Taqaja’ chwe",
+        "definition": "Préstame"
+      },
+      {
+        "term": "Niwajo’ yich’on",
+        "definition": "Quiero hablar"
+      }
+    ],
+    "createdAt": "2026-05-13T14:29:55.129Z"
+  },
+  {
+    "id": "vocabulario-de-kaqchikel-9a-animales-salvajes",
+    "name": "Animales Salvajes",
+    "vocabulary": [
+      {
+        "term": "Köj",
+        "definition": "León"
+      },
+      {
+        "term": "B'alam",
+        "definition": "Tigre"
+      },
+      {
+        "term": "Utiw",
+        "definition": "Coyote"
+      },
+      {
+        "term": "Nimaqul",
+        "definition": "Cocodrilo"
+      },
+      {
+        "term": "Tix",
+        "definition": "Elefante"
+      },
+      {
+        "term": "Ixpa'ch",
+        "definition": "Lagartija"
+      },
+      {
+        "term": "Oxox",
+        "definition": "Oso"
+      },
+      {
+        "term": "Par",
+        "definition": "Zorillo"
+      },
+      {
+        "term": "B'atz'",
+        "definition": "Mono"
+      },
+      {
+        "term": "K'oy",
+        "definition": "Mico"
+      },
+      {
+        "term": "Kumatz",
+        "definition": "Serpiente"
+      },
+      {
+        "term": "Masat",
+        "definition": "Venado"
+      }
+    ],
+    "createdAt": "2026-05-13T14:29:25.087Z"
+  },
+  {
+    "id": "vocabulario-de-kaqchikel-9a-partes-del-cuerpo",
+    "name": "Partes del cuerpo",
+    "vocabulary": [
+      {
+        "term": "wi'aj",
+        "definition": "pelo"
+      },
+      {
+        "term": "jolomaj",
+        "definition": "cabeza"
+      },
+      {
+        "term": "paläj",
+        "definition": "cara"
+      },
+      {
+        "term": "tzamaj",
+        "definition": "nariz"
+      },
+      {
+        "term": "q'ab'aj",
+        "definition": "brazo"
+      },
+      {
+        "term": "aqanaj",
+        "definition": "pierna"
+      },
+      {
+        "term": "xikinaj",
+        "definition": "oreja"
+      },
+      {
+        "term": "chi'aj",
+        "definition": "boca"
+      },
+      {
+        "term": "telemaj",
+        "definition": "hombro"
+      },
+      {
+        "term": "pamaj",
+        "definition": "panza"
+      },
+      {
+        "term": "ixk'äq",
+        "definition": "uña"
+      },
+      {
+        "term": "kïk'",
+        "definition": "sangre"
+      },
+      {
+        "term": "eyaj",
+        "definition": "dientes"
+      },
+      {
+        "term": "ruwi'q'ab'aj",
+        "definition": "dedos de la mano"
+      },
+      {
+        "term": "ruwi'aqanaj",
+        "definition": "dedos de los pies"
+      },
+      {
+        "term": "b'aq",
+        "definition": "hueso"
+      },
+      {
+        "term": "ti'ojil",
+        "definition": "carne/músculo"
+      },
+      {
+        "term": "ruxe'pamaj",
+        "definition": "cintura"
+      },
+      {
+        "term": "qulaj",
+        "definition": "cuello"
+      }
+    ],
+    "createdAt": "2026-05-13T14:28:58.733Z"
+  },
+  {
+    "id": "vocabulario-de-kaqchikel-9a-figuras-geom-tricas",
+    "name": "Figuras geométricas",
+    "vocabulary": [
+      {
+        "term": "setesïk",
+        "definition": "circulo"
+      },
+      {
+        "term": "kajtz'ïk",
+        "definition": "cuadrado"
+      },
+      {
+        "term": "yuqtz'ïk",
+        "definition": "rectangulo"
+      },
+      {
+        "term": "kab'alajwach(kajtz'ïk)",
+        "definition": "diamante"
+      },
+      {
+        "term": "oxtz'ïk",
+        "definition": "triangulo"
+      },
+      {
+        "term": "waqtz'ïk",
+        "definition": "pentagono"
+      },
+      {
+        "term": "waqaxaqtz'ïk",
+        "definition": "octagono"
+      },
+      {
+        "term": "q'oq'",
+        "definition": "ovalo"
+      }
+    ],
+    "createdAt": "2026-05-13T14:28:27.173Z"
+  },
+  {
+    "id": "vocabulario-de-kaqchikel-9a-los-sabores",
+    "name": "Los Sabores",
+    "vocabulary": [
+      {
+        "term": "ki'",
+        "definition": "dulce"
+      },
+      {
+        "term": "tzäy",
+        "definition": "salado"
+      },
+      {
+        "term": "k'äy",
+        "definition": "amargo"
+      },
+      {
+        "term": "ch'äm",
+        "definition": "ácido"
+      },
+      {
+        "term": "ch'amch'öj",
+        "definition": "agrio"
+      },
+      {
+        "term": "poqön",
+        "definition": "picante"
+      },
+      {
+        "term": "ch'amki'",
+        "definition": "agridulce"
+      },
+      {
+        "term": "chuj",
+        "definition": "desagradable"
+      }
+    ],
+    "createdAt": "2026-05-13T14:26:37.965Z"
+  },
+  {
+    "id": "vocabulario-de-kaqchikel-9a-saludos",
+    "name": "Saludos",
+    "vocabulary": [
+      {
+        "term": "Xsaqär",
+        "definition": "Buenos días"
+      },
+      {
+        "term": "Xqaq'íj",
+        "definition": "Buenas tardes"
+      },
+      {
+        "term": "Xokaq'a'",
+        "definition": "Buenas noches"
+      },
+      {
+        "term": "¿Ütz awäch?",
+        "definition": "¿Cómo estas?"
+      },
+      {
+        "term": "Matyox k'a ri'",
+        "definition": "Qué bien"
+      }
+    ],
+    "createdAt": "2026-05-13T14:25:24.496Z"
+  }
+]
