@@ -7,9 +7,11 @@
     "sync-decks": "node scripts/sync-shared-decks.js",
     "prebuild": "npm run sync-decks",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "db:init": "node scripts/init-db.js"
   },
   "dependencies": {
+    "@vercel/postgres": "^0.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

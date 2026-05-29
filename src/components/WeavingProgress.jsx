@@ -15,11 +15,12 @@ function WeavingProgress({ user }) {
     }
     
     updateProgress()
-    // Listen for storage changes (from other tabs/windows)
     window.addEventListener('storage', updateProgress)
-    
+    window.addEventListener('kaqchikel-weaving-updated', updateProgress)
+
     return () => {
       window.removeEventListener('storage', updateProgress)
+      window.removeEventListener('kaqchikel-weaving-updated', updateProgress)
     }
   }, [userId])
 

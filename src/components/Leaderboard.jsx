@@ -1,19 +1,41 @@
-import { useEffect, useState } from 'react'
-import { getWeavingLeaderboard } from '../utils/weavingProgress'
+import { useEffect, useState, useCallback } from 'react'
+import { fetchWeavingLeaderboard } from '../utils/weavingProgress'
 
 function Leaderboard() {
   const [entries, setEntries] = useState([])
+  const [loading, setLoading] = useState(true)
+  const refresh = useCallback(async () => {
+    setLoading(true)
+    try {
+      const data = await fetchWeavingLeaderboard(10)
+      setEntries(data)
+    } catch {
+      setEntries([])
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
-    const refresh = () => {
-      const data = getWeavingLeaderboard()
-      setEntries(data.slice(0, 5)) // top 5
-    }
-
     refresh()
     window.addEventListener('storage', refresh)
-    return () => window.removeEventListener('storage', refresh)
-  }, [])
+    window.addEventListener('kaqchikel-weaving-updated', refresh)
+    return () => {
+      window.removeEventListener('storage', refresh)
+      window.removeEventListener('kaqchikel-weaving-updated', refresh)
+    }
+  }, [refresh])
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-2xl shadow-xl p-8">
+        <h3 className="text-2xl font-bold text-gray-900 mb-2 text-center">
+          Tabla de líderes
+        </h3>
+        <p className="text-center text-gray-500">Cargando…</p>
+      </div>
+    )
+  }
 
   if (!entries.length) {
     return (
@@ -22,7 +44,8 @@ function Leaderboard() {
           Tabla de líderes
         </h3>
         <p className="text-center text-gray-500">
-          Aún no hay puntadas registradas. ¡Empieza a practicar para aparecer en la tabla!
+          Aún no hay puntadas registradas. Inicia sesión con tu cuenta de la escuela,
+          practica y completa un mazo para aparecer en la tabla.
         </p>
       </div>
     )
@@ -34,7 +57,7 @@ function Leaderboard() {
         Tabla de líderes
       </h3>
       <p className="text-center text-gray-500 mb-6">
-        Personas con más puntadas tejidas en su manta.
+        Personas con más puntadas tejidas en su manta (toda la escuela).
       </p>
       <div className="space-y-3">
         {entries.map((entry, index) => (
@@ -82,4 +105,3 @@ function Leaderboard() {
 }
 
 export default Leaderboard
-
