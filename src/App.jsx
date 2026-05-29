@@ -24,7 +24,7 @@ function App() {
       setUser(null)
     } else {
       setUser(currentUser)
-      if (currentUser?.accessToken) {
+      if (currentUser?.email) {
         registerUserOnServer(currentUser.accessToken)
       }
     }

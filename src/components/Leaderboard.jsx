@@ -1,16 +1,26 @@
 import { useEffect, useState, useCallback } from 'react'
 import { fetchWeavingLeaderboard } from '../utils/weavingProgress'
+import { ensureServerSession } from '../utils/userSession'
+import { getUser } from '../utils/auth'
 
 function Leaderboard() {
   const [entries, setEntries] = useState([])
   const [loading, setLoading] = useState(true)
+  const [status, setStatus] = useState('ok')
+
   const refresh = useCallback(async () => {
     setLoading(true)
+    const user = getUser()
+    if (user?.email) {
+      await ensureServerSession()
+    }
     try {
-      const data = await fetchWeavingLeaderboard(50)
-      setEntries(data)
+      const result = await fetchWeavingLeaderboard(50)
+      setEntries(result.entries)
+      setStatus(result.status)
     } catch {
       setEntries([])
+      setStatus('network_error')
     } finally {
       setLoading(false)
     }
@@ -37,6 +47,35 @@ function Leaderboard() {
     )
   }
 
+  if (status === 'db_error') {
+    return (
+      <div className="bg-white rounded-2xl shadow-xl p-8">
+        <h3 className="text-2xl font-bold text-gray-900 mb-2 text-center">
+          Tabla de líderes
+        </h3>
+        <p className="text-center text-amber-700 text-sm">
+          La base de datos no está conectada en el servidor. Contacta a la persona
+          administradora (Vercel → Storage → Postgres).
+        </p>
+      </div>
+    )
+  }
+
+  if (status === 'empty') {
+    return (
+      <div className="bg-white rounded-2xl shadow-xl p-8">
+        <h3 className="text-2xl font-bold text-gray-900 mb-2 text-center">
+          Tabla de líderes
+        </h3>
+        <p className="text-center text-gray-500">
+          Aún no hay estudiantes en el servidor. Cada estudiante debe usar{' '}
+          <strong>Iniciar sesión</strong> con su cuenta <strong>@antiguais.org</strong>{' '}
+          (no modo invitado). Después de iniciar sesión, vuelve a esta página.
+        </p>
+      </div>
+    )
+  }
+
   if (!entries.length) {
     return (
       <div className="bg-white rounded-2xl shadow-xl p-8">
@@ -44,8 +83,7 @@ function Leaderboard() {
           Tabla de líderes
         </h3>
         <p className="text-center text-gray-500">
-          Aún no hay estudiantes registrados. Deben usar Iniciar sesión con su cuenta
-          @antiguais.org (el modo invitado no aparece aquí).
+          No se pudo cargar la tabla. Comprueba tu conexión e inténtalo de nuevo.
         </p>
       </div>
     )

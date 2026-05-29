@@ -1,5 +1,6 @@
 // Weaving progress utility - manages stitches and blanket progress
 import { getUser } from './auth'
+import { fetchWithGoogleAuth } from './userSession'
 
 const getStorageKey = (userId = null) => {
   if (!userId) {
@@ -59,21 +60,15 @@ function notifyProgressUpdated() {
 }
 
 /** Sync one stitch to the shared server leaderboard (signed-in users only). */
-export async function syncStitchToServer(accessToken) {
-  if (!accessToken) return null
-
+export async function syncStitchToServer() {
   try {
-    const res = await fetch('/api/progress/stitch', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      }
+    const { res } = await fetchWithGoogleAuth('/api/progress/stitch', {
+      method: 'POST'
     })
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}))
-      console.warn('syncStitchToServer:', err.error || res.status)
+    if (!res?.ok) {
+      const err = await res?.json().catch(() => ({}))
+      console.warn('syncStitchToServer:', err?.error || res?.status)
       return null
     }
 
@@ -124,8 +119,8 @@ export const addStitch = (userId = null) => {
     console.error('Error saving weaving progress:', error)
   }
 
-  if (user?.accessToken) {
-    syncStitchToServer(user.accessToken).then((server) => {
+  if (user?.email) {
+    syncStitchToServer().then((server) => {
       if (server?.totalStitches != null && server.totalStitches > progress.totalStitches) {
         progress.totalStitches = server.totalStitches
         try {
@@ -192,25 +187,37 @@ export const getWeavingLeaderboardLocal = () => {
   return entries
 }
 
-/** School-wide leaderboard from Vercel Postgres, with local fallback. */
+/**
+ * School-wide leaderboard from Vercel Postgres.
+ * @returns {{ entries: array, status: 'ok'|'empty'|'db_error'|'network_error' }}
+ */
 export async function fetchWeavingLeaderboard(limit = 50) {
   try {
     const res = await fetch('/api/leaderboard', { cache: 'no-store' })
-    if (res.ok) {
-      const data = await res.json()
-      if (Array.isArray(data.entries)) {
-        return data.entries.slice(0, limit)
+    const data = await res.json().catch(() => ({}))
+
+    if (res.ok && Array.isArray(data.entries)) {
+      return {
+        entries: data.entries.slice(0, limit),
+        status: data.entries.length > 0 ? 'ok' : 'empty'
       }
     }
-    if (res.status === 503) {
-      console.warn('fetchWeavingLeaderboard: database not configured, using local data')
-      return getWeavingLeaderboardLocal().slice(0, limit)
-    }
-  } catch (error) {
-    console.warn('fetchWeavingLeaderboard: API unavailable, using local data', error)
-  }
 
-  return getWeavingLeaderboardLocal().slice(0, limit)
+    if (res.status === 503) {
+      return {
+        entries: getWeavingLeaderboardLocal().slice(0, limit),
+        status: 'db_error'
+      }
+    }
+
+    return { entries: [], status: 'network_error' }
+  } catch (error) {
+    console.warn('fetchWeavingLeaderboard:', error)
+    return {
+      entries: getWeavingLeaderboardLocal().slice(0, limit),
+      status: 'network_error'
+    }
+  }
 }
 
 /** @deprecated Use fetchWeavingLeaderboard for async server data */

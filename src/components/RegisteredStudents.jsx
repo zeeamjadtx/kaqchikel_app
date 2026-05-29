@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getUser } from '../utils/auth'
 import { isAdminUser } from '../utils/admin'
+import { fetchWithGoogleAuth } from '../utils/userSession'
 
 function RegisteredStudents({ user }) {
   const [users, setUsers] = useState([])
@@ -11,7 +12,7 @@ function RegisteredStudents({ user }) {
   const isAdmin = isAdminUser(currentUser)
 
   const load = useCallback(async () => {
-    if (!isAdmin || !currentUser?.accessToken) {
+    if (!isAdmin) {
       setLoading(false)
       return
     }
@@ -19,10 +20,14 @@ function RegisteredStudents({ user }) {
     setLoading(true)
     setError('')
     try {
-      const res = await fetch('/api/admin/users', {
-        headers: { Authorization: `Bearer ${currentUser.accessToken}` },
+      const { res } = await fetchWithGoogleAuth('/api/admin/users', {
         cache: 'no-store'
       })
+      if (!res) {
+        setError('Inicia sesión de nuevo para ver la lista de estudiantes.')
+        setUsers([])
+        return
+      }
       const data = await res.json()
       if (!res.ok) {
         setError(data.error || 'No se pudo cargar la lista')
@@ -36,7 +41,7 @@ function RegisteredStudents({ user }) {
     } finally {
       setLoading(false)
     }
-  }, [isAdmin, currentUser?.accessToken])
+  }, [isAdmin, currentUser?.email])
 
   useEffect(() => {
     load()
