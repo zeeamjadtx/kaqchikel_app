@@ -1,10 +1,8 @@
-import { neon, neonConfig } from '@neondatabase/serverless'
-import ws from 'ws'
+import pg from 'pg'
 
-// Required for Vercel Node.js serverless functions (not Edge)
-neonConfig.webSocketConstructor = ws
+const { Pool } = pg
 
-let sql = null
+let pool = null
 
 function isValidPostgresUrl(url) {
   if (!url || typeof url !== 'string') return false
@@ -13,7 +11,7 @@ function isValidPostgresUrl(url) {
   return trimmed.startsWith('postgres://') || trimmed.startsWith('postgresql://')
 }
 
-/** Prefer pooled URL (hostname often contains -pooler). */
+/** Works with Prisma Postgres (db.prisma.io), Neon, and standard Postgres URLs. */
 export function getConnectionString() {
   const keys = [
     'POSTGRES_URL',
@@ -34,15 +32,24 @@ export function isDbConfigured() {
   return Boolean(getConnectionString())
 }
 
-export function getSql() {
-  if (!sql) {
+export function getPool() {
+  if (!pool) {
     const connectionString = getConnectionString()
     if (!connectionString) {
-      throw new Error(
-        'Database not configured. Set POSTGRES_URL (pooled) on Vercel Storage.'
-      )
+      throw new Error('Database not configured. Set POSTGRES_URL on Vercel.')
     }
-    sql = neon(connectionString)
+    pool = new Pool({
+      connectionString,
+      ssl: { rejectUnauthorized: false },
+      max: 3,
+      idleTimeoutMillis: 10000,
+      connectionTimeoutMillis: 10000
+    })
   }
-  return sql
+  return pool
+}
+
+export async function query(text, params = []) {
+  const result = await getPool().query(text, params)
+  return result.rows
 }

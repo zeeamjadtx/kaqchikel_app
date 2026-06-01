@@ -52,10 +52,9 @@ function Leaderboard({ user }) {
           Tabla de líderes
         </h3>
         <p className="text-center text-amber-700 text-sm">
-          La base de datos no está conectada correctamente en Vercel. La persona
-          administradora debe verificar Storage → Postgres → conectar el proyecto y
-          usar la URL <strong>pooled</strong> en <code>POSTGRES_URL</code>, luego
-          volver a desplegar.
+          No se pudo conectar a la base de datos. En Vercel: Storage → Postgres →
+          conectar el proyecto, y en Environment asegúrate de que{' '}
+          <code>POSTGRES_URL</code> tenga la cadena de conexión. Luego redeploy.
         </p>
       </div>
     )
