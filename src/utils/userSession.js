@@ -66,7 +66,6 @@ export async function registerUserOnServer(accessToken) {
       return false
     }
 
-    window.dispatchEvent(new CustomEvent('kaqchikel-weaving-updated'))
     return true
   } catch (error) {
     console.warn('registerUserOnServer:', error)
@@ -74,7 +73,7 @@ export async function registerUserOnServer(accessToken) {
   }
 }
 
-/** Sync session to server with a fresh Google token if needed. */
+/** Sync session to server with a fresh Google token if needed. Does not fire refresh events. */
 export async function ensureServerSession() {
   const { res } = await fetchWithGoogleAuth('/api/auth/session', { method: 'POST' })
   if (!res) return false
@@ -85,7 +84,6 @@ export async function ensureServerSession() {
     return false
   }
 
-  window.dispatchEvent(new CustomEvent('kaqchikel-weaving-updated'))
   return true
 }
 

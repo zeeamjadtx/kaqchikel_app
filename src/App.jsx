@@ -6,7 +6,7 @@ import LoginPage from './components/LoginPage'
 import MatchingView from './components/MatchingView'
 import { getUser, logout, isAllowedSchoolEmail } from './utils/auth'
 import { migrateGuestVocabularyToUser } from './utils/vocabularyStorage'
-import { registerUserOnServer, ensureServerSession } from './utils/userSession'
+import { registerUserOnServer } from './utils/userSession'
 
 function App() {
   const [view, setView] = useState('home') // 'home', 'flashcards', 'practice', 'matching', 'login'
@@ -15,7 +15,6 @@ function App() {
   const [previousView, setPreviousView] = useState('home')
   const [user, setUser] = useState(null)
   const [checkingAuth, setCheckingAuth] = useState(true)
-  const [homeRefreshKey, setHomeRefreshKey] = useState(0)
 
   useEffect(() => {
     const currentUser = getUser()
@@ -60,11 +59,7 @@ function App() {
   }
 
   const handleBackToHome = () => {
-    setHomeRefreshKey((k) => k + 1)
     setView('home')
-    if (user?.email) {
-      ensureServerSession()
-    }
   }
 
   const handleGoToPractice = () => {
@@ -76,7 +71,6 @@ function App() {
       migrateGuestVocabularyToUser(String(userData.id))
     }
     setUser(userData)
-    setHomeRefreshKey((k) => k + 1)
     setView('home')
   }
 
@@ -134,7 +128,6 @@ function App() {
 
   return (
     <HomePage
-      key={homeRefreshKey}
       onGoToPractice={handleGoToPractice}
       user={user}
       onLoginSuccess={handleLoginSuccess}

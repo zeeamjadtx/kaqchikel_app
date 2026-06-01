@@ -11,13 +11,13 @@ function RegisteredStudents({ user }) {
   const currentUser = user || getUser()
   const isAdmin = isAdminUser(currentUser)
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (showSpinner = true) => {
     if (!isAdmin) {
       setLoading(false)
       return
     }
 
-    setLoading(true)
+    if (showSpinner) setLoading(true)
     setError('')
     try {
       const { res } = await fetchWithGoogleAuth('/api/admin/users', {
@@ -44,9 +44,17 @@ function RegisteredStudents({ user }) {
   }, [isAdmin, currentUser?.email])
 
   useEffect(() => {
-    load()
-    window.addEventListener('kaqchikel-weaving-updated', load)
-    return () => window.removeEventListener('kaqchikel-weaving-updated', load)
+    load(true)
+    let timer
+    const onUpdate = () => {
+      clearTimeout(timer)
+      timer = setTimeout(() => load(false), 400)
+    }
+    window.addEventListener('kaqchikel-weaving-updated', onUpdate)
+    return () => {
+      window.removeEventListener('kaqchikel-weaving-updated', onUpdate)
+      clearTimeout(timer)
+    }
   }, [load])
 
   if (!isAdmin) return null
