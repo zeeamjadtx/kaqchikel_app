@@ -81,7 +81,7 @@ export async function syncStitchToServer() {
   }
 }
 
-export const addStitch = (userId = null) => {
+export const addStitch = async (userId = null) => {
   const progress = getWeavingProgress(userId)
   const user = getUser()
 
@@ -120,17 +120,16 @@ export const addStitch = (userId = null) => {
   }
 
   if (user?.email) {
-    syncStitchToServer().then((server) => {
-      if (server?.totalStitches != null && server.totalStitches > progress.totalStitches) {
-        progress.totalStitches = server.totalStitches
-        try {
-          localStorage.setItem(getStorageKey(userId), JSON.stringify(progress))
-          notifyProgressUpdated()
-        } catch (e) {
-          console.error('Error syncing server stitch count:', e)
-        }
+    const server = await syncStitchToServer()
+    if (server?.totalStitches != null) {
+      progress.totalStitches = Math.max(progress.totalStitches, server.totalStitches)
+      try {
+        localStorage.setItem(getStorageKey(userId), JSON.stringify(progress))
+        notifyProgressUpdated()
+      } catch (e) {
+        console.error('Error syncing server stitch count:', e)
       }
-    })
+    }
   }
 
   return progress
@@ -204,11 +203,14 @@ export async function fetchWeavingLeaderboard(limit = 50) {
     }
 
     if (res.status === 503 || res.status === 500) {
+      const errText = String(data.error || '')
       const isDb =
-        data.error?.includes('connection') ||
-        data.error?.includes('Postgres') ||
-        data.error?.includes('POSTGRES') ||
-        data.error?.includes('Database')
+        errText.includes('connection') ||
+        errText.includes('Postgres') ||
+        errText.includes('POSTGRES') ||
+        errText.includes('Database') ||
+        errText.includes('resource-not-found') ||
+        errText.includes('Resource Not Found')
       if (isDb || res.status === 503) {
         return { entries: [], status: 'db_error' }
       }

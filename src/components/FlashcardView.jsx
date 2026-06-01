@@ -48,7 +48,18 @@ function FlashcardView({ vocabulary, onBack, user, deckTitle }) {
 
   const currentCard = shuffledVocabulary[currentIndex]
 
-  const handleNext = () => {
+  const awardStitchIfDeckComplete = async (allCardsStudied) => {
+    if (!allCardsStudied || stitchAddedForSet) return
+    const progress = await addStitch(userId)
+    const newStitchIndex = progress.totalStitches - 1
+    const pattern = getStitchPattern(newStitchIndex)
+    setLastStitchPattern(pattern)
+    setShowStitchNotification(true)
+    setTimeout(() => setShowStitchNotification(false), 3000)
+    setStitchAddedForSet(true)
+  }
+
+  const handleNext = async () => {
     if (currentIndex < shuffledVocabulary.length - 1) {
       // Mark current card as studied if they've seen the definition
       const newStudiedCards = new Set([...studiedCards])
@@ -63,16 +74,7 @@ function FlashcardView({ vocabulary, onBack, user, deckTitle }) {
       // Check if all cards have been studied
       const allCardsStudied = newStudiedCards.size === shuffledVocabulary.length
       
-      // Add ONE stitch only when all cards in the set have been visited
-      if (allCardsStudied && !stitchAddedForSet) {
-        const progress = addStitch(userId)
-        const newStitchIndex = progress.totalStitches - 1
-        const pattern = getStitchPattern(newStitchIndex)
-        setLastStitchPattern(pattern)
-        setShowStitchNotification(true)
-        setTimeout(() => setShowStitchNotification(false), 3000)
-        setStitchAddedForSet(true)
-      }
+      await awardStitchIfDeckComplete(allCardsStudied)
     } else {
       // On the last card, check if all have been studied
       const newStudiedCards = new Set([...studiedCards])
@@ -83,16 +85,7 @@ function FlashcardView({ vocabulary, onBack, user, deckTitle }) {
       
       const allCardsStudied = newStudiedCards.size === shuffledVocabulary.length
       
-      // Add ONE stitch only when all cards in the set have been visited
-      if (allCardsStudied && !stitchAddedForSet) {
-        const progress = addStitch(userId)
-        const newStitchIndex = progress.totalStitches - 1
-        const pattern = getStitchPattern(newStitchIndex)
-        setLastStitchPattern(pattern)
-        setShowStitchNotification(true)
-        setTimeout(() => setShowStitchNotification(false), 3000)
-        setStitchAddedForSet(true)
-      }
+      await awardStitchIfDeckComplete(allCardsStudied)
     }
   }
 
@@ -103,7 +96,7 @@ function FlashcardView({ vocabulary, onBack, user, deckTitle }) {
     }
   }
 
-  const handleFlip = () => {
+  const handleFlip = async () => {
     const card = shuffledVocabulary[currentIndex]
     setIsFlipped(!isFlipped)
 
@@ -119,16 +112,7 @@ function FlashcardView({ vocabulary, onBack, user, deckTitle }) {
       // Check if all cards have been studied after this flip
       const allCardsStudied = newStudiedCards.size === shuffledVocabulary.length
       
-      // Add ONE stitch only when all cards in the set have been visited
-      if (allCardsStudied && !stitchAddedForSet) {
-        const progress = addStitch(userId)
-        const newStitchIndex = progress.totalStitches - 1
-        const pattern = getStitchPattern(newStitchIndex)
-        setLastStitchPattern(pattern)
-        setShowStitchNotification(true)
-        setTimeout(() => setShowStitchNotification(false), 3000)
-        setStitchAddedForSet(true)
-      }
+      await awardStitchIfDeckComplete(allCardsStudied)
     }
   }
 

@@ -80,15 +80,23 @@ function MatchingView({ vocabulary, onBack, user, deckTitle }) {
 
   useEffect(() => {
     if (allMatchedCorrectly && !mistakeMade && !stitchAwarded) {
-      const progress = addStitch(userId)
-      const newStitchIndex = progress.totalStitches - 1
-      const pattern = getStitchPattern(newStitchIndex)
-      setLastStitchPattern(pattern)
-      setShowStitchNotification(true)
-      setStitchAwarded(true)
-      setFeedback('¡Perfecto! Emparejaste todos los términos correctamente. Has ganado un punto.')
-
-      setTimeout(() => setShowStitchNotification(false), 3000)
+      let cancelled = false
+      ;(async () => {
+        const progress = await addStitch(userId)
+        if (cancelled) return
+        const newStitchIndex = progress.totalStitches - 1
+        const pattern = getStitchPattern(newStitchIndex)
+        setLastStitchPattern(pattern)
+        setShowStitchNotification(true)
+        setStitchAwarded(true)
+        setFeedback(
+          '¡Perfecto! Emparejaste todos los términos correctamente. Has ganado un punto.'
+        )
+        setTimeout(() => setShowStitchNotification(false), 3000)
+      })()
+      return () => {
+        cancelled = true
+      }
     } else if (allMatchedCorrectly && mistakeMade && !stitchAwarded) {
       setFeedback(
         'Terminaste todos los emparejamientos, pero hubo errores en el camino. Intenta de nuevo sin errores para ganar un punto.'

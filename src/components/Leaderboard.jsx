@@ -1,19 +1,21 @@
 import { useEffect, useState, useCallback } from 'react'
 import { fetchWeavingLeaderboard } from '../utils/weavingProgress'
 import { ensureServerSession } from '../utils/userSession'
-import { getUser } from '../utils/auth'
 
-function Leaderboard() {
+function Leaderboard({ user }) {
   const [entries, setEntries] = useState([])
   const [loading, setLoading] = useState(true)
   const [status, setStatus] = useState('ok')
 
   const refresh = useCallback(async () => {
-    setLoading(true)
-    const user = getUser()
-    if (user?.email) {
-      await ensureServerSession()
+    if (!user?.email) {
+      setEntries([])
+      setLoading(false)
+      return
     }
+
+    setLoading(true)
+    await ensureServerSession()
     try {
       const result = await fetchWeavingLeaderboard(50)
       setEntries(result.entries)
@@ -24,16 +26,12 @@ function Leaderboard() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [user?.email, user?.id])
 
   useEffect(() => {
     refresh()
-    window.addEventListener('storage', refresh)
     window.addEventListener('kaqchikel-weaving-updated', refresh)
-    return () => {
-      window.removeEventListener('storage', refresh)
-      window.removeEventListener('kaqchikel-weaving-updated', refresh)
-    }
+    return () => window.removeEventListener('kaqchikel-weaving-updated', refresh)
   }, [refresh])
 
   if (loading) {
@@ -54,8 +52,10 @@ function Leaderboard() {
           Tabla de líderes
         </h3>
         <p className="text-center text-amber-700 text-sm">
-          La base de datos no está conectada en el servidor. Contacta a la persona
-          administradora (Vercel → Storage → Postgres).
+          La base de datos no está conectada correctamente en Vercel. La persona
+          administradora debe verificar Storage → Postgres → conectar el proyecto y
+          usar la URL <strong>pooled</strong> en <code>POSTGRES_URL</code>, luego
+          volver a desplegar.
         </p>
       </div>
     )
@@ -68,9 +68,8 @@ function Leaderboard() {
           Tabla de líderes
         </h3>
         <p className="text-center text-gray-500">
-          Aún no hay estudiantes en el servidor. Cada estudiante debe usar{' '}
-          <strong>Iniciar sesión</strong> con su cuenta <strong>@antiguais.org</strong>{' '}
-          (no modo invitado). Después de iniciar sesión, vuelve a esta página.
+          Aún no hay puntajes en la escuela. Practica y completa un mazo (tarjetas o
+          emparejar sin errores) para ganar puntadas y aparecer aquí.
         </p>
       </div>
     )
@@ -95,7 +94,7 @@ function Leaderboard() {
         Tabla de líderes
       </h3>
       <p className="text-center text-gray-500 mb-6">
-        Estudiantes que han iniciado sesión (toda la escuela). Ordenados por puntadas.
+        Puntajes de toda la escuela (solo cuentas con sesión iniciada).
       </p>
       <div className="space-y-3">
         {entries.map((entry, index) => (
@@ -122,7 +121,7 @@ function Leaderboard() {
               )}
               <div>
                 <p className="font-semibold text-gray-900">
-                  {entry.user.name || 'Invitado'}
+                  {entry.user.name || 'Estudiante'}
                 </p>
                 {entry.user.email && (
                   <p className="text-xs text-gray-500">{entry.user.email}</p>

@@ -111,6 +111,12 @@ export async function getAllUsers(limit = 200) {
 
 export async function registerUser(profile) {
   await upsertUser(profile)
+  const sql = getSql()
+  await sql`
+    INSERT INTO weaving_progress (user_id, total_stitches, last_updated_at)
+    VALUES (${profile.id}, 0, NOW())
+    ON CONFLICT (user_id) DO NOTHING
+  `
 }
 
 export async function incrementStitch(profile) {

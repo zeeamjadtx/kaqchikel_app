@@ -200,10 +200,36 @@ function HomePage({ onGoToPractice, user, onLoginSuccess, onGoToLogin }) {
         <WeavingProgress user={user} />
       </section>
 
-      {/* Leaderboard Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <Leaderboard />
-        <RegisteredStudents user={user} />
+      {/* Leaderboard Section — visible when signed in */}
+      <section
+        id="leaderboard"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20"
+      >
+        {user ? (
+          <>
+            <Leaderboard user={user} />
+            <RegisteredStudents user={user} />
+          </>
+        ) : (
+          <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              Tabla de líderes
+            </h3>
+            <p className="text-gray-500 mb-6">
+              Inicia sesión con tu cuenta <strong>@antiguais.org</strong> para ver los
+              puntajes de toda la escuela.
+            </p>
+            {onGoToLogin && (
+              <button
+                type="button"
+                onClick={onGoToLogin}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
+              >
+                Iniciar sesión
+              </button>
+            )}
+          </div>
+        )}
       </section>
 
       {/* Features Section */}

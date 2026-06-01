@@ -36,7 +36,9 @@ export async function handleLeaderboardGet() {
     const isDb =
       msg.includes('connection') ||
       msg.includes('POSTGRES') ||
-      msg.includes('Database not configured')
+      msg.includes('Database not configured') ||
+      msg.includes('resource-not-found') ||
+      msg.includes('Resource Not Found')
     return {
       status: isDb ? 503 : 500,
       body: { error: err.message || 'Failed to load leaderboard', entries: [] }
@@ -73,7 +75,15 @@ export async function handleStitchPost(req) {
     }
   } catch (err) {
     console.error('handleStitchPost:', err)
-    return { status: 500, body: { error: err.message || 'Failed to save stitch' } }
+    const msg = err.message || ''
+    const isDb =
+      msg.includes('connection') ||
+      msg.includes('resource-not-found') ||
+      msg.includes('Database not configured')
+    return {
+      status: isDb ? 503 : 500,
+      body: { error: err.message || 'Failed to save stitch' }
+    }
   }
 }
 

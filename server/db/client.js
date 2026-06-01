@@ -1,10 +1,33 @@
-import { neon } from '@neondatabase/serverless'
+import { neon, neonConfig } from '@neondatabase/serverless'
+import ws from 'ws'
+
+// Required for Vercel Node.js serverless functions (not Edge)
+neonConfig.webSocketConstructor = ws
 
 let sql = null
 
-/** Pooled URL for Vercel serverless (not POSTGRES_URL_NON_POOLING). */
+function isValidPostgresUrl(url) {
+  if (!url || typeof url !== 'string') return false
+  const trimmed = url.trim().replace(/^["']|["']$/g, '')
+  if (!trimmed) return false
+  return trimmed.startsWith('postgres://') || trimmed.startsWith('postgresql://')
+}
+
+/** Prefer pooled URL (hostname often contains -pooler). */
 export function getConnectionString() {
-  return process.env.POSTGRES_URL || process.env.DATABASE_URL || null
+  const keys = [
+    'POSTGRES_URL',
+    'DATABASE_URL',
+    'POSTGRES_PRISMA_URL',
+    'PRISMA_DATABASE_URL'
+  ]
+  for (const key of keys) {
+    const value = process.env[key]
+    if (isValidPostgresUrl(value)) {
+      return value.trim().replace(/^["']|["']$/g, '')
+    }
+  }
+  return null
 }
 
 export function isDbConfigured() {
@@ -15,7 +38,9 @@ export function getSql() {
   if (!sql) {
     const connectionString = getConnectionString()
     if (!connectionString) {
-      throw new Error('Database not configured. Set POSTGRES_URL on Vercel.')
+      throw new Error(
+        'Database not configured. Set POSTGRES_URL (pooled) on Vercel Storage.'
+      )
     }
     sql = neon(connectionString)
   }
